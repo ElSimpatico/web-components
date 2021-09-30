@@ -1,43 +1,43 @@
-import { getClassNames } from "../utils/common";
+import { getClassNames } from '../utils/common';
 
-import "./styles_02.scss";
+import './styles_02.scss';
 
 export class HelloWorldComponent extends HTMLElement {
-  constructor() {
-    super();
-    this.isRendered = false;
-  }
-
-  static get observedAttributes() {
-    return ["name"];
-  }
-
-  connectedCallback() {
-    if (this.isConnected && !this.isRendered) {
-      this.isRendered = true;
-      this.render();
+    constructor() {
+        super();
+        this.isRendered = false;
     }
-  }
 
-  attributeChangedCallback(attrName, oldValue, newValue) {
-    console.log(attrName, oldValue, newValue);
-    this.render();
-  }
+    static get observedAttributes() {
+        return ['name'];
+    }
 
-  render() {
-    const name = this.getAttribute("name");
-    const className = this.getAttribute("classname");
+    connectedCallback() {
+        if (this.isConnected && !this.isRendered) {
+            this.isRendered = true;
+            this.render();
+        }
+    }
 
-    const classes = getClassNames({
-      ["hello-world"]: true,
-      [className]: !!className,
-    });
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        console.log(attrName, oldValue, newValue);
+        this.render();
+    }
 
-    this.innerHTML = `
+    render() {
+        const name = this.getAttribute('name');
+        const className = this.getAttribute('classname');
+
+        const classes = getClassNames({
+            ['hello-world']: true,
+            [className]: !!className,
+        });
+
+        this.innerHTML = `
       <div class="${classes}">
-          Hello ${name ? name : "World"}!!
+          Hello ${name ? name : 'World'}!!
       </div>`;
-  }
+    }
 }
 
-customElements.define("hello-world", HelloWorldComponent);
+customElements.define('hello-world', HelloWorldComponent);

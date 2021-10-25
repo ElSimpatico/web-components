@@ -10,26 +10,22 @@
 
     <body>
         <div>
-            <wc-hello-world name="Pepito"></wc-hello-world>
+            <!-- Add custom element tag with attribute -->
         </div>
     </body>
 </html>
 
 <script>
     class HelloWorldComponent extends HTMLElement {
+        // Implement Custom Element Class to get attribute
+
         constructor() {
             super();
         }
 
         connectedCallback() {
             if (this.isConnected) {
-                const name = this.getAttribute('name');
-
-                const div = document.createElement('div');
-                div.className = 'hello-world-container';
-                div.textContent = `Hello ${name ? name : 'World'}!!`;
-
-                this.appendChild(div);
+                // render markup geting attributte
             }
         }
     }

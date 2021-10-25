@@ -10,26 +10,15 @@
 
     <body>
         <div>
-            <wc-hello-world></wc-hello-world>
+            <!-- Add custom element tag -->
         </div>
     </body>
 </html>
 
 <script>
     class HelloWorldComponent extends HTMLElement {
-        constructor() {
-            super();
-        }
-
-        connectedCallback() {
-            if (this.isConnected) {
-                const div = document.createElement('div');
-                div.className = 'hello-world-container';
-                div.textContent = 'Hola mundo!';
-                this.appendChild(div);
-            }
-        }
+        // Implement Custom Element Class
     }
 
-    customElements.define('wc-hello-world', HelloWorldComponent);
+    // Define custom element
 </script>

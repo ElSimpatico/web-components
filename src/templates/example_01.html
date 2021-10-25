@@ -92,21 +92,7 @@
         }
 
         render() {
-            const template = document.getElementById('wc-todo-template');
-            const content = template.content.cloneNode(true);
-            this.appendChild(content);
-            const buttonAdd = this.querySelector('.wc-todo-header .wc-button.add');
-            buttonAdd.addEventListener('click', function () {
-                const textField = document.querySelector('.wc-text-field');
-                const inputText = textField.querySelector('input[type="text"');
-                if (inputText.value) {
-                    const itemTemplate = document.getElementById('wc-todo-item-template');
-                    const item = itemTemplate.content.cloneNode(true);
-                    item.querySelector('label').textContent = inputText.value;
-
-                    document.querySelector('.wc-todo-list').appendChild(item);
-                }
-            });
+            // add code snippet
         }
     }
 

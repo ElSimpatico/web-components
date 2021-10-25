@@ -89,29 +89,12 @@
         connectedCallback() {
             if (this.isConnected && !this.isRendered) {
                 this.isRendered = true;
-                this.attachShadow({ mode: 'open' });
                 this.render();
             }
         }
 
         render() {
-            const template = document.getElementById('wc-todo-template');
-            const content = template.content.cloneNode(true);
-            this.shadowRoot.appendChild(content);
-            const buttonAdd = this.shadowRoot.querySelector('.wc-todo-header .wc-button.add');
-            const slotTitle = this.shadowRoot.querySelector('slot[name="title"]');
-            var that = this;
-            buttonAdd.addEventListener('click', function () {
-                const textField = that.shadowRoot.querySelector('.wc-text-field');
-                const inputText = textField.querySelector('input[type="text"');
-                if (inputText.value) {
-                    const itemTemplate = document.getElementById('wc-todo-item-template');
-                    const item = itemTemplate.content.cloneNode(true);
-                    item.querySelector('label').textContent = inputText.value;
-
-                    that.shadowRoot.querySelector('.wc-todo-list').appendChild(item);
-                }
-            });
+            // add code snippet
         }
     }
 

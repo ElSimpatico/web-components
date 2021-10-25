@@ -10,52 +10,31 @@
 
     <body>
         <div>
-            <wc-hello-world name="Pepito"></wc-hello-world>
+            <!-- Add custom element tag with attribute -->
         </div>
     </body>
 </html>
 
 <script>
     class HelloWorldComponent extends HTMLElement {
+        // Implement Custom Element Class to get/observe attribute
+
         constructor() {
             super();
-            this.defaultName = 'World';
         }
 
         connectedCallback() {
             if (this.isConnected) {
-                const name = this.getAttribute('name') || this.defaultName;
-
-                const div = document.createElement('div');
-                div.className = 'hello-world-container';
-                div.textContent = 'Hello';
-
-                const span = document.createElement('span');
-                span.className = 'hello-name';
-                span.style.marginLeft = '8px';
-                span.textContent = name;
-
-                div.appendChild(span);
-                this.appendChild(div);
+                // add code snippet
             }
         }
 
         static get observedAttributes() {
-            return ['name'];
+            // add code snippet
         }
 
         attributeChangedCallback(name, oldValue, newValue) {
-            switch (name) {
-                case 'name':
-                    this.onChangeName(newValue);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        onChangeName(value) {
-            this.querySelector('.hello-name').textContent = value || this.defaultName;
+            // add code snippet
         }
     }
 

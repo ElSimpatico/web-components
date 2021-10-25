@@ -9,88 +9,43 @@
     </head>
 
     <body>
-        <button class="wc-button open-modal-button">Open Modal</button>
+        <!-- Add other tag elements -->
 
-        <wc-modal>
-            <span class="close-icon" slot="modal-close-icon">X</span>
-            <div class="modal-content" slot="modal-content">
-                <div>Modal Content</div>
-            </div>
-        </wc-modal>
-        <template id="wc-modal-template">
-            <style> @import "./exercise_01_styles.css"; </style>
-            <div class="wc-modal">
-                <div class="modal-close-wrapper">
-                    <slot name="modal-close-icon"><span></slot>
-                </div>
-                <slot name="modal-content"><div>Add your content</div></slot>
-            </div>
-        </template>
+        <!-- Add custom element tag -->
     </body>
 </html>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        [...document.getElementsByClassName('open-modal-button')].forEach((element) => {
-            element.addEventListener('click', (event) => {
-                document.querySelector('wc-modal').setAttribute('open', true);
-            });
-        });
+        // add code snippet
     });
     class WCModalComponent extends HTMLElement {
         constructor() {
             super();
             this.isRendered = false;
-            this.open = false;
-            this.closeModalElement;
-            this.onClose = this.onClose.bind(this);
         }
 
         connectedCallback() {
             if (this.isConnected && !this.isRendered) {
                 this.isRendered = true;
-                this.attachShadow({ mode: 'open' });
                 this.render();
             }
         }
 
         disconnectedCallback() {
-            this.closeModalElement.removeEventListener("click", this.onClose);
+            // add code snippet
         }
 
         static get observedAttributes() {
-            return ['open'];
-        }
-
-        onChangeOpen(oldOpen, newOpen) {
-            if (this.shadowRoot) {
-                const classList = this.shadowRoot.querySelector('.wc-modal').classList;
-                newOpen ? classList.add('open') : classList.remove('open');
-            }
+            // add code snippet
         }
 
         attributeChangedCallback(name, oldValue, newValue) {
-            switch (name) {
-                case 'open':
-                    this.onChangeOpen(oldValue, newValue);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        onClose() {
-            this.removeAttribute('open');
+            // add code snippet
         }
 
         render() {
-            const template = document.getElementById('wc-modal-template');
-            const content = template.content.cloneNode(true);
-
-            this.shadowRoot.appendChild(content);
-
-            this.closeModalElement = this.shadowRoot.querySelector('.modal-close-wrapper');
-            this.closeModalElement.addEventListener("click", this.onClose);
+            // add code snippet
         }
     }
 

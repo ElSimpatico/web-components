@@ -1,0 +1,6 @@
+.element {
+    color: orange;
+}
+.element > span {
+    color: green;
+}

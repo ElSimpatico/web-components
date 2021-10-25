@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+    </head>
+
+    <body>
+        <wc-todo>
+            <h1 slot="title">Task board</h1>
+        </wc-todo>
+        <template id="wc-todo-template">
+            <style>
+                .wc-todo-container {
+                    background-color: darkgrey;
+                    padding: 24px;
+                    width: fit-content;
+                    max-width: 80%;
+                    margin: 0 auto;
+                }
+                .wc-todo-header {
+                    display: flex;
+                    align-items: end;
+                    margin-bottom: 16px;
+                }
+                .wc-todo-header > * {
+                    margin-right: 16px;
+                }
+                .wc-todo-header .wc-text-field {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .wc-todo-header .wc-text-field label {
+                    margin-bottom: 8px;
+                }
+                .wc-button {
+                    padding: 8px 16px;
+                    background-color: #1b1b1b;
+                    box-sizing: content-box;
+                    border: 1px solid;
+                    color: white;
+                    cursor: pointer;
+                }
+                .wc-button:hover {
+                    opacity: 0.7;
+                }
+                .wc-todo-list {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                }
+            </style>
+            <div class="wc-todo-container">
+                <slot name="title"></slot>
+                <div class="wc-todo-header">
+                    <div class="wc-text-field">
+                        <label>Item name:</label>
+                        <input type="text" />
+                    </div>
+                    <button class="wc-button add">Add</button>
+                </div>
+                <ul class="wc-todo-list">
+                    <li><div>Item 1</div></li>
+                    <li><div>Item 2</div></li>
+                    <li><div>Item 3</div></li>
+                </ul>
+            </div>
+        </template>
+        <template id="wc-todo-item-template">
+            <li>
+                <div>
+                    <input type="checkbox" />
+                    <label></label>
+                </div>
+            </li>
+        </template>
+    </body>
+</html>
+
+<script>
+    class TodoComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.isRendered = false;
+        }
+
+        connectedCallback() {
+            if (this.isConnected && !this.isRendered) {
+                this.isRendered = true;
+                this.attachShadow({ mode: 'open' });
+                this.render();
+            }
+        }
+
+        render() {
+            const template = document.getElementById('wc-todo-template');
+            const content = template.content.cloneNode(true);
+            this.shadowRoot.appendChild(content);
+            const buttonAdd = this.shadowRoot.querySelector('.wc-todo-header .wc-button.add');
+            const slotTitle = this.shadowRoot.querySelector('slot[name="title"]');
+            var that = this;
+            buttonAdd.addEventListener('click', function () {
+                const textField = that.shadowRoot.querySelector('.wc-text-field');
+                const inputText = textField.querySelector('input[type="text"');
+                if (inputText.value) {
+                    const itemTemplate = document.getElementById('wc-todo-item-template');
+                    const item = itemTemplate.content.cloneNode(true);
+                    item.querySelector('label').textContent = inputText.value;
+
+                    that.shadowRoot.querySelector('.wc-todo-list').appendChild(item);
+                }
+            });
+        }
+    }
+
+    customElements.define('wc-todo', TodoComponent);
+</script>

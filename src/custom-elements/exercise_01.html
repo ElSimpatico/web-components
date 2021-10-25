@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+        <link rel="stylesheet" href="./exercise_01_styles.css" />
+    </head>
+
+    <body>
+        <div>
+            <div class="wc-controls">
+                <div class="wc-text-field">
+                    <label htmlFor="wc-input-text">Say hello to:</label>
+                    <input type="text" id="wc-input-text" />
+                </div>
+                <div class="wc-size">
+                    <label htmlFor="wc-input-size">Select font size:</label>
+                    <input type="range" min="16" max="64" step="1" value="20" id="wc-input-size" />
+                </div>
+                <div class="wc-color">
+                    <label htmlFor="wc-input-color">Select color text:</label>
+                    <input type="color" value="#000000" id="wc-input-color" />
+                </div>
+            </div>
+            <wc-hello-world id="wc-hello-world-0"></wc-hello-world>
+        </div>
+    </body>
+</html>
+
+<script>
+    function onChange(event) {
+        document.querySelector('#wc-hello-world-0').setAttribute('name', event.target.value);
+    }
+    function onChangeSize(event) {
+        document.querySelector('#wc-hello-world-0').setAttribute('size', event.target.value);
+    }
+    function onChangeColor(event) {
+        console.log(event.target.value);
+        document.querySelector('#wc-hello-world-0').setAttribute('color', event.target.value);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        [...document.getElementsByClassName('wc-text-field')].forEach((element) => {
+            const input = element.querySelector('input[type="text"]');
+            input.addEventListener('change', (event) => {
+                onChange(event);
+            });
+            input.addEventListener('keyup', (event) => {
+                onChange(event);
+            });
+        });
+        [...document.getElementsByClassName('wc-size')].forEach((element) => {
+            const inputRange = element.querySelector('input[type="range"]');
+            inputRange.addEventListener('change', (event) => {
+                onChangeSize(event);
+            });
+        });
+        [...document.getElementsByClassName('wc-color')].forEach((element) => {
+            const inputColor = element.querySelector('input[type="color"]');
+            inputColor.addEventListener('input', (event) => {
+                onChangeColor(event);
+            });
+        });
+    });
+    class HelloWorldComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.rendered = false;
+            this.defaultName = 'World';
+            this.rangeSize = [16, 64];
+        }
+
+        connectedCallback() {
+            if (this.isConnected && !this.rendered) {
+                this.rendered = true;
+                this.render();
+            }
+        }
+
+        static get observedAttributes() {
+            return ['name', 'size', 'color'];
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            switch (name) {
+                case 'name':
+                    this.onChangeName(newValue);
+                    break;
+                case 'size':
+                    this.onChangeSize(newValue);
+                    break;
+                case 'color':
+                    this.onChangeColor(newValue);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        onChangeName(value) {
+            const name = this.querySelector('.wc-name');
+            name.textContent = value || this.defaultName;
+        }
+
+        onChangeSize(value) {
+            let newSize = value;
+            if (value < this.rangeSize[0]) {
+                newSize = this.rangeSize[0];
+            } else if (value > this.rangeSize[1]) {
+                newSize = this.rangeSize[1];
+            }
+            this.style.fontSize = `${newSize}px`;
+        }
+
+        onChangeColor(value) {
+            this.style.color = value;
+        }
+
+        render() {
+            const name = this.getAttribute('name') || this.defaultName;
+            this.innerHTML = `
+                <div class="wc-hello-world-container">
+                    <span>Hello</span>
+                    <span class="wc-name">${name}</span>
+                    <span>!!</span>
+                </div>
+            `;
+        }
+    }
+
+    customElements.define('wc-hello-world', HelloWorldComponent);
+</script>

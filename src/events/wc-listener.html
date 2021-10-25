@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+    </head>
+
+    <body>
+        <div class="pagina">
+            <button class="remove">remove listener</button>
+            <app-element></app-element>
+            <template id="app-element-template">
+                <link rel="stylesheet" href="./styles.css" />
+
+                <div>
+                    <button class="wc-button">Click!</button>
+                </div>
+            </template>
+        </div>
+    </body>
+
+    <script>
+        class AppElement extends HTMLElement {
+            constructor() {
+                super();
+                this.isRendered = false;
+                this.onClickButton = this.callToAction.bind(this);
+                // this.onClickButton = () => this.callToAction();
+            }
+
+            callToAction() {
+                console.log('call to action', this);
+            }
+
+            removeListener() {
+                // this.button.removeEventListener('click', this.callToAction);
+                // this.button.removeEventListener('click', this.callToAction.bind(this));
+                // this.button.removeEventListener('click', () => this.callToAction());
+                this.button.removeEventListener('click', this.onClickButton);
+            }
+
+            connectedCallback() {
+                if (this.isConnected && !this.isRendered) {
+                    this.isRendered = true;
+                    this.render();
+                }
+            }
+
+            disconnectedCallback() {
+                // this.button.removeEventListener('click', this.callToAction);
+                // this.button.removeEventListener('click', this.callToAction.bind(this));
+                // this.button.removeEventListener('click', () => this.callToAction());
+                // this.button.removeEventListener('click', () => this.onClickButton);
+                // this.button.removeEventListener('click', this.onClickButton);
+            }
+
+            render() {
+                const template = document.getElementById('app-element-template');
+                const content = template.content.cloneNode(true);
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+                shadowRoot.appendChild(content);
+                this.button = shadowRoot.querySelector('button');
+                document.querySelector('.remove').addEventListener('click', this.removeListener.bind(this));
+
+                // this.onClickButton = this.callToAction.bind(this);
+                this.onClickButton = () => this.callToAction();
+
+                // this.button.addEventListener('click', this.callToAction);
+                // this.button.addEventListener('click', this.callToAction.bind(this));
+                // this.button.addEventListener('click', () => this.callToAction);
+
+                this.button.addEventListener('click', this.onClickButton);
+            }
+        }
+        customElements.define('app-element', AppElement);
+    </script>
+</html>

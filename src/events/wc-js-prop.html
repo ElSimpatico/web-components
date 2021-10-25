@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+    </head>
+
+    <body>
+        <div class="pagina">
+            <app-element></app-element>
+            <template id="app-element-template">
+                <link rel="stylesheet" href="./styles.css" />
+
+                <div>
+                    <button class="wc-button">Click!</button>
+                </div>
+            </template>
+        </div>
+    </body>
+
+    <script>
+        class AppElement extends HTMLElement {
+            constructor() {
+                super();
+                this.isRendered = false;
+            }
+
+            callToAction() {
+                console.log('Button click!');
+            }
+
+            connectedCallback() {
+                if (this.isConnected && !this.isRendered) {
+                    this.isRendered = true;
+                    this.render();
+                }
+            }
+
+            disconnectedCallback() {
+                this.button.onclick = null;
+            }
+
+            render() {
+                const template = document.getElementById('app-element-template');
+                const content = template.content.cloneNode(true);
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+                shadowRoot.appendChild(content);
+                this.button = shadowRoot.querySelector('button');
+                this.button.onclick = () => this.callToAction();
+            }
+        }
+        customElements.define('app-element', AppElement);
+    </script>
+</html>

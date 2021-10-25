@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+    </head>
+
+    <body>
+        <div class="pagina">
+            <app-element></app-element>
+            <template id="app-element-template">
+                <style>
+                    @import './styles.css';
+                </style>
+                <div class="element">
+                    <h1>App Element</h1>
+                    <span>hello!</span>
+                </div>
+            </template>
+        </div>
+    </body>
+
+    <script>
+        class AppElement extends HTMLElement {
+            connectedCallback() {
+                this.innerHTML = `
+                   <style> @import "./styles.css"; </style>
+                    <div class="element">
+                        <h1>App Element</h1>
+                        <span>hello!</span>
+                    </div>`;
+                const template = document.getElementById('app-element-template').content.cloneNode(true);
+                this.attachShadow({ mode: 'open' }).appendChild(template);
+            }
+        }
+        customElements.define('app-element', AppElement);
+    </script>
+</html>

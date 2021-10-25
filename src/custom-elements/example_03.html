@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <div>
+            <wc-hello-world name="Pepito"></wc-hello-world>
+        </div>
+    </body>
+</html>
+
+<script>
+    class HelloWorldComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.defaultName = 'World';
+        }
+
+        connectedCallback() {
+            if (this.isConnected) {
+                const name = this.getAttribute('name') || this.defaultName;
+
+                const div = document.createElement('div');
+                div.className = 'hello-world-container';
+                div.textContent = 'Hello';
+
+                const span = document.createElement('span');
+                span.className = 'hello-name';
+                span.style.marginLeft = '8px';
+                span.textContent = name;
+
+                div.appendChild(span);
+                this.appendChild(div);
+            }
+        }
+
+        static get observedAttributes() {
+            return ['name'];
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            switch (name) {
+                case 'name':
+                    this.onChangeName(newValue);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        onChangeName(value) {
+            this.querySelector('.hello-name').textContent = value || this.defaultName;
+        }
+    }
+
+    customElements.define('wc-hello-world', HelloWorldComponent);
+</script>

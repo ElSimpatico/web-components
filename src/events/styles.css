@@ -10,3 +10,24 @@
 .wc-button:hover {
     opacity: 0.7;
 }
+
+.close-icon {
+    background-color: white;
+    color: black;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+.modal-content {
+    background-color: white;
+    color: black;
+    width: 80%;
+    padding: 20px;
+    margin: 80px 0px;
+    height: max-content;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web components native</title>
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <button class="wc-button open-modal-button">Open Modal</button>
+
+        <wc-modal>
+            <span class="close-icon" slot="modal-close-icon">X</span>
+            <div class="modal-content" slot="modal-content">
+                <div>Modal Content</div>
+            </div>
+        </wc-modal>
+        <template id="wc-modal-template">
+            <style> @import "./exercise_01_styles.css"; </style>
+            <div class="wc-modal">
+                <div class="modal-close-wrapper">
+                    <slot name="modal-close-icon"><span></slot>
+                </div>
+                <slot name="modal-content"><div>Add your content</div></slot>
+            </div>
+        </template>
+    </body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        [...document.getElementsByClassName('open-modal-button')].forEach((element) => {
+            element.addEventListener('click', (event) => {
+                document.querySelector('wc-modal').onOpen();
+                event.target.style.display = 'none';
+            });
+        });
+        document.querySelector('body').addEventListener('onCloseModal', (event) => {
+            document.querySelectorAll('.open-modal-button').forEach((element) => {
+                element.style.display = 'block';
+            });
+        });
+       
+    });
+    class WCModalComponent extends HTMLElement {
+        constructor() {
+            super();
+            this.isRendered = false;
+            this.closeModalElement;
+            this.onOpen = this.onOpen.bind(this);
+            this.onClose = this.onClose.bind(this);
+        }
+
+        connectedCallback() {
+            if (this.isConnected && !this.isRendered) {
+                this.isRendered = true;
+                this.attachShadow({ mode: 'open' });
+                this.render();
+            }
+        }
+
+        disconnectedCallback() {
+            this.closeModalElement.removeEventListener("click", this.onClose);
+        }
+
+        onOpen() {
+            if (this.shadowRoot) {
+                const classList = this.shadowRoot.querySelector('.wc-modal').classList;
+                !classList.contains('open') && classList.add('open');
+            } 
+        }
+
+        onClose() {
+            if (this.shadowRoot) {
+                const oncCloseEvent = new CustomEvent('onCloseModal', {
+                    bubbles: true,
+                    composed: true,
+                });
+                this.shadowRoot.dispatchEvent(oncCloseEvent);
+    
+                const classList = this.shadowRoot.querySelector('.wc-modal').classList;
+                classList.contains('open') && classList.remove('open');
+            } 
+        }
+
+        render() {
+            const template = document.getElementById('wc-modal-template');
+            const content = template.content.cloneNode(true);
+
+            this.shadowRoot.appendChild(content);
+
+            this.closeModalElement = this.shadowRoot.querySelector('.modal-close-wrapper');
+            this.closeModalElement.addEventListener("click", this.onClose);
+        }
+    }
+
+    customElements.define('wc-modal', WCModalComponent);
+</script>

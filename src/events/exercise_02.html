@@ -33,24 +33,17 @@
     document.addEventListener('DOMContentLoaded', function () {
         [...document.getElementsByClassName('open-modal-button')].forEach((element) => {
             element.addEventListener('click', (event) => {
-                document.querySelector('wc-modal').onOpen();
-                event.target.style.display = 'none';
+                // add code snippet
             });
         });
-        document.querySelector('body').addEventListener('onCloseModal', (event) => {
-            document.querySelectorAll('.open-modal-button').forEach((element) => {
-                element.style.display = 'block';
-            });
-        });
+       // add code snippet
        
     });
     class WCModalComponent extends HTMLElement {
         constructor() {
             super();
             this.isRendered = false;
-            this.closeModalElement;
-            this.onOpen = this.onOpen.bind(this);
-            this.onClose = this.onClose.bind(this);
+            // add code snippet 
         }
 
         connectedCallback() {
@@ -61,28 +54,12 @@
             }
         }
 
-        disconnectedCallback() {
-            this.closeModalElement.removeEventListener("click", this.onClose);
-        }
-
         onOpen() {
-            if (this.shadowRoot) {
-                const classList = this.shadowRoot.querySelector('.wc-modal').classList;
-                !classList.contains('open') && classList.add('open');
-            } 
+           // add code snippet
         }
 
         onClose() {
-            if (this.shadowRoot) {
-                const oncCloseEvent = new CustomEvent('onCloseModal', {
-                    bubbles: true,
-                    composed: true,
-                });
-                this.shadowRoot.dispatchEvent(oncCloseEvent);
-    
-                const classList = this.shadowRoot.querySelector('.wc-modal').classList;
-                classList.contains('open') && classList.remove('open');
-            } 
+           // add code snippet
         }
 
         render() {
@@ -91,8 +68,7 @@
 
             this.shadowRoot.appendChild(content);
 
-            this.closeModalElement = this.shadowRoot.querySelector('.modal-close-wrapper');
-            this.closeModalElement.addEventListener("click", this.onClose);
+            // add code snippet
         }
     }
 
